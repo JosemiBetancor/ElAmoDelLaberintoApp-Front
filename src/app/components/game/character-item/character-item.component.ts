@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackendService } from 'src/app/services/backend.service';
 import { lastValueFrom } from 'rxjs';
 import { CharacterInventoryModalComponent } from '../character-inventory-modal/character-inventory-modal.component';
+import { CharacterSkillsModalComponent } from '../character-skills-modal/character-skills-modal.component';
 
 @Component({
   selector: 'app-character-item',
@@ -17,6 +18,7 @@ import { CharacterInventoryModalComponent } from '../character-inventory-modal/c
     FormsModule,
     ReactiveFormsModule,
     CharacterInventoryModalComponent,
+    CharacterSkillsModalComponent,
   ],
   templateUrl: './character-item.component.html',
   styleUrls: ['./character-item.component.css']
@@ -26,7 +28,7 @@ export class CharacterItemComponent implements OnInit {
   @Input() character!: ICharacter;
 
   @ViewChild('characterInventoryModal') characterInventoryModal: CharacterInventoryModalComponent;
-
+  @ViewChild('characterSkillsModal') characterSkillsModal: CharacterSkillsModalComponent;
   inputStringOnEdit = false;
   hover = false;
 
@@ -81,6 +83,9 @@ export class CharacterItemComponent implements OnInit {
 
   openInventory() {
     this.characterInventoryModal.openModal(this.character);
+  }
+  openHabilidades() {
+    this.characterSkillsModal.openModal(this.character);
   }
 
   async onFileSelected(event: any): Promise<void> {

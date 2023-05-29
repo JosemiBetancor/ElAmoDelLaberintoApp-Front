@@ -74,4 +74,11 @@ export class BackendService {
     const url = `${this.backendApiUrl}objeto/${id}`;
     return this.http.get(url, { params: this.setParams(params) });
   }
+
+
+  //habilidades
+  gethabilidades(idPersonaje: any, params?: any): Observable<any> {
+    const url = `${this.backendApiUrl}habilidades/personaje/${idPersonaje}`;
+    return this.http.get(url, { params: this.setParams(params) });
+  }
 }

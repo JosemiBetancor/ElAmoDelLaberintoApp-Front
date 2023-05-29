@@ -9,6 +9,7 @@ export interface ICharacter {
     alineamiento?: string;
     imagen?: string;
     inventario?: IInventario[];
+    habilidades?:IHabilidades[];
 }
 
 export interface IInventario {
@@ -18,4 +19,12 @@ export interface IInventario {
     nombre?: string;
     peso?: number;
     valor?: number;
+}
+
+export interface IHabilidades {
+    id?:number;
+	interpretativas?:number;
+	nombre?:string;
+	idPersonaje?:number;
+
 }
