@@ -15,7 +15,7 @@ export interface ICharacter {
 export interface IInventario {
     id?: number;
     idPersonaje?: number;
-    consumible?: string;
+    consumible?: number;
     nombre?: string;
     peso?: number;
     valor?: number;

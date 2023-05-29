@@ -1,0 +1,45 @@
+<nz-modal nzCentered [(nzVisible)]="isVisible" (nzOnCancel)="close()" [nzMaskClosable]="false">
+    <ng-container *nzModalTitle>
+        Añadir objeto
+    </ng-container>
+    <ng-container *nzModalContent>
+        <form [formGroup]="formGroup" *ngIf="formGroup">
+
+            <div>
+                <div>
+                    Nombre:
+                </div>
+                <div>
+                    <input nz-input formControlName="nombre"/>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    Peso:
+                </div>
+                <div>
+                    <input nz-input formControlName="peso"/>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    Valor:
+                </div>
+                <div>
+                    <input nz-input formControlName="valor"/>
+                </div>
+            </div>
+
+            <label nz-checkbox formControlName="consumible">Consumible</label>
+
+        </form>
+    </ng-container>
+    <ng-container *nzModalFooter="">
+        <div style="display: flex; flex-direction: row-reverse; column-gap: 5px;">
+            <button nz-button nzType="primary" (click)="createNewObject()">Añadir</button>
+            <button nz-button nzType="primary" nzDanger (click)="close()">Cancelar</button>
+        </div>
+    </ng-container>
+</nz-modal>
