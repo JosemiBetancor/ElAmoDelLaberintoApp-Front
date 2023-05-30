@@ -1,2 +1,8 @@
-<div #mapContainer style="flex: 1 1 auto; min-width: 0; height: 100%"></div>
-<button class="floating-button" (click)="addSpriteToMap()">Añadir Sprite</button>
+<div #mapContainer style="flex: 1 1 auto; min-width: 0; height: 100%; position: relative">
+    <button style="position: absolute; top: 5px; right: 5px;" >Añadir Sprite</button>
+</div>
+
+
+<!-- <div style="position: fixed; z-index: 9999; top: 10px; left: 10px; background: #ffffff">
+    <img *ngFor="let item of sprites" [src]="item" (click)="addSpriteToMap(item)">
+</div> -->

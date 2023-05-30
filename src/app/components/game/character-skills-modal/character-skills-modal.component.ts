@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ICharacter, IHabilidades, IInventario } from 'src/app/interfaces/game.interfaces';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { BackendService } from 'src/app/services/backend.service';
-import { lastValueFrom } from 'rxjs';
+import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import{CharacterSkillsAddModalComponent} from '../character-skills-add-modal/character-skills-add-modal.component';
 @Component({
   selector: 'app-character-skills-modal',
   standalone: true,
@@ -18,11 +19,16 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzSpinModule,
     NzTableModule,
     NzIconModule,
+    CharacterSkillsAddModalComponent,
   ],
   templateUrl: './character-skills-modal.component.html',
   styleUrls: ['./character-skills-modal.component.css']
 })
 export class CharacterSkillsModalComponent {
+
+  @ViewChild(CharacterSkillsAddModalComponent) characterSkillsAddModalComponent: CharacterSkillsAddModalComponent;
+
+
   isVisible = false;
   character: ICharacter;
   loading = true;
@@ -47,7 +53,10 @@ export class CharacterSkillsModalComponent {
     }
     this.loading = false;
   }
-
+  openSkillsAddModal() {
+    this.isVisible = false;
+    this.characterSkillsAddModalComponent.openModal();
+  }
   close(): void {
     this.isVisible = false;
     this.character = null;
@@ -61,4 +70,33 @@ export class CharacterSkillsModalComponent {
       this.idForDelete.push(habilidad.id);
     }
   }
+  createSkillsAddModal(event: IInventario) {
+    this.isVisible = true;
+    this.habilidades.push(event);
+  }
+
+  async acceptModal(): Promise<void> {
+    try {
+      const observablesBackend: Observable<any>[] = [];
+      for (let skill of this.habilidades) {
+        if (!skill.id) {
+          observablesBackend.push(this.backendService.postSkill(this.character.id, skill));
+        }
+      }
+      for (let id of this.idForDelete) {
+        observablesBackend.push(this.backendService.deleteSkill(id));
+      }
+      if (observablesBackend.length > 0) {
+        await lastValueFrom(forkJoin(observablesBackend));
+      }
+      this.close();
+    } catch (e) {
+      //Meter mensaje error
+      console.log(e);
+    }
+  }
+  closeSkillsAddModal(): void {
+    this.isVisible = true;
+  }
+
 }

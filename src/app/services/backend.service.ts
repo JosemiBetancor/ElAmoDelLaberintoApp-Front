@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ICharacter, IInventario } from '../interfaces/game.interfaces';
+import { ICharacter, IHabilidades, IInventario } from '../interfaces/game.interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -93,4 +93,13 @@ export class BackendService {
     return this.http.get(url, { params: this.setParams(params) });
   }
 
+  postSkill(idPersonaje: any, body: IHabilidades, params?: any): Observable<any> {
+    const url = `${this.backendApiUrl}habilidad/${idPersonaje}`;
+    return this.http.post(url, body, { params: this.setParams(params) });
+  }
+
+  deleteSkill(idObjeto: any, params?: any) {
+    const url = `${this.backendApiUrl}habilidad/${idObjeto}`;
+    return this.http.delete(url, { params: this.setParams(params) });
+  }
 }

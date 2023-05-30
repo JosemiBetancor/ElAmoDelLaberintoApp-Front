@@ -1,6 +1,15 @@
-<nz-modal nzCentered [(nzVisible)]="isVisible" (nzOnCancel)="close()" [nzMaskClosable]="false">
+<nz-modal nzCentered [(nzVisible)]="isVisible" (nzOnCancel)="close()" [nzClosable]="false" [nzMaskClosable]="false">
     <ng-container *nzModalTitle>
-        Inventario - {{ character.nombre }}
+        <div style="display: flex">
+            <div>
+                habilidades - {{ character?.nombre }}
+            </div>
+            <div style="flex: 1 1 auto; min-width: auto"></div>
+            <div>
+                <button nz-button nzType="primary" nzSize="default" (click)="openSkillsAddModal()"><span nz-icon
+                        nzType="plus"></span></button>
+            </div>
+        </div>
     </ng-container>
     <ng-container *nzModalContent>
         <nz-spin [nzSpinning]="loading">
@@ -8,12 +17,14 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
+                        <th>Interpretativa</th>
                         <th nzWidth="20px">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let habilidad of habilidades; let i = index">
                         <td>{{ habilidad.nombre }}</td>
+                        <td>{{ (habilidad.interpretativas ? 'Interpretativa' : 'No Interpretativa')}}</td>
                         <td>
                             <div style="display: flex; justify-content: center;">
                                 <span nz-icon nzType="delete" nzTheme="outline" style="cursor: pointer;" (click)="deleteHabilidad(habilidad, i)"></span>
@@ -26,8 +37,10 @@
     </ng-container>
     <ng-container *nzModalFooter>
         <div style="display: flex;" class="inventory-modal-buttons-footer">
-            <button nz-button nzType="primary" [disabled]="loading">Aceptar</button>
+            <button nz-button nzType="primary" [disabled]="loading" (click)="acceptModal()">Aceptar</button>
             <button nz-button nzType="primary" nzDanger (click)="close()">Cancelar</button>
         </div>
     </ng-container>
 </nz-modal>
+<app-character-skills-add-modal (closeEvent)="closeSkillsAddModal()"
+    (createEvent)="createSkillsAddModal($event)"></app-character-skills-add-modal>
