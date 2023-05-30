@@ -25,7 +25,7 @@ export class CharacterAddCharacterModalComponent {
 
   isVisible = false;
   formGroup: UntypedFormGroup;
-  @Output() createEvent = new EventEmitter<IInventario>();
+  @Output() createEvent = new EventEmitter<ICharacter>();
   @Output() closeEvent = new EventEmitter<any>();
 
   constructor(
