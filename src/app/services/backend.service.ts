@@ -44,8 +44,8 @@ export class BackendService {
     return this.http.get(url, { params: this.setParams(params) });
   }
 
-  postCharacters(id: any, body: ICharacter, params?: any): Observable<any> {
-    const url = `${this.backendApiUrl}${this.endPoints.characters}/${id}`;
+  postCharacters(body: ICharacter, params?: any): Observable<any> {
+    const url = `${this.backendApiUrl}${this.endPoints.characters}`;
     return this.http.post(url, body, { params: this.setParams(params) });
   }
 
