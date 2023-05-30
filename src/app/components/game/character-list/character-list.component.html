@@ -1,6 +1,6 @@
 <div class="character-list-container">
     <app-character-item *ngFor="let character of characters" [character]="character"></app-character-item>
-    <button style="align-items: flex-end;" (click)="openCharacterAddModal()">Añadir personaje</button>
+    <button nz-button nzType="primary" style="align-items: flex-end;" (click)="openCharacterAddModal()">Añadir personaje</button>
 </div>
 
 <app-character-add-character-modal (closeEvent)="closeCharacterAddModal()"

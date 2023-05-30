@@ -8,6 +8,7 @@ import { ReactiveFormsModule} from '@angular/forms';
 import { CharacterAddCharacterModalComponent } from '../character-add-character-modal/character-add-character-modal.component';
 import { lastValueFrom } from 'rxjs';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 @Component({
   selector: 'app-character-list',
   standalone: true,
@@ -18,6 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     ReactiveFormsModule,
     CharacterAddCharacterModalComponent,
     NzIconModule,
+    NzButtonModule,
   ],
   templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.css']

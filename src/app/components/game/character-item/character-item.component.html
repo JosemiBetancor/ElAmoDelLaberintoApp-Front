@@ -1,13 +1,13 @@
 <div class="character-item-container">
     <div class="character-item-principal-data">
-        <div class="contenedorImg" [ngClass]="{'hover': hover}"
-        (mouseenter)="hover = true"
-        (mouseleave)="hover = false">
-          <label>
-            <img class="character-item-image" [src]="character.imagen" height="100" width="100">
-            <span class="cambiarFotoPerfil">Cambiar</span>
-            <input id="fileInput" type="file"  (change)="onFileSelected($event)" style="display: none;">
-          </label></div>
+        <div class="contenedorImg" [ngClass]="{'hover': hover}" (mouseenter)="hover = true"
+            (mouseleave)="hover = false">
+            <label>
+                <img class="character-item-image" [src]="character.imagen" height="100" width="100">
+                <span class="cambiarFotoPerfil">Cambiar</span>
+                <input id="fileInput" type="file" (change)="onFileSelected($event)" style="display: none;">
+            </label>
+        </div>
         <div class="character-item-principal-data-text-container">
             <div class="character-item-principal-data-text">
                 {{ character.nombre }}
@@ -22,6 +22,10 @@
         <div style="flex: 1 1 auto; min-width: 0">
         </div>
         <div class="character-item-level-data">
+            <div > 
+                <button  nz-button nzType="primary" nzDanger (click)="deleteCharacter(character.id)"><span nz-icon
+                        nzType="delete" nzTheme="outline"></span></button>
+            </div>
             <div class="character-item-level-data-item">
                 <div>
                     Nv:
@@ -56,7 +60,7 @@
         <div class="character-item-level-data-item-png-container">
             <div class="character-item-level-data-item-png">
                 <img src="assets/blindaje.png" alt="escudo" width="60" height="60">
-                <input nz-input [ngModel]="character.claseArmadura" 
+                <input nz-input [ngModel]="character.claseArmadura"
                     (focusout)="inputStringFocusOutAttributeEvent($event, 'claseArmadura')"
                     (keyup.enter)="editAttributeCharacter($event, 'claseArmadura', {isNumber: true})">
             </div>

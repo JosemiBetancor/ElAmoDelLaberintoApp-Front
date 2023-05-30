@@ -55,7 +55,9 @@ export class BackendService {
   }
 
   deleteCharacter(id: any, params?: any) {
+    
     const url = `${this.backendApiUrl}${this.endPoints.characters}/${id}`;
+    console.log(url);
     return this.http.delete(url, { params: this.setParams(params) });
   }
 

@@ -9,7 +9,7 @@ import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CharacterInventoryAddModalComponent } from '../character-inventory-add-modal/character-inventory-add-modal.component';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-character-inventory-modal',
   standalone: true,
@@ -37,7 +37,7 @@ export class CharacterInventoryModalComponent {
 
   constructor(
     private readonly backendService: BackendService,
-  ) {}
+  ) { }
 
   async openModal(character: ICharacter): Promise<void> {
     this.character = character;
@@ -46,7 +46,7 @@ export class CharacterInventoryModalComponent {
     try {
       const response = await lastValueFrom(this.backendService.getinventory(character.id));
       this.inventory = response;
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       // Meter aqui un mensaje de error
       this.isVisible = false;
@@ -85,22 +85,41 @@ export class CharacterInventoryModalComponent {
   async acceptModal(): Promise<void> {
     try {
       const observablesBackend: Observable<any>[] = [];
+      const itemsToDelete: number[] = [];
+
       for (let item of this.inventory) {
         if (!item.id) {
           observablesBackend.push(this.backendService.postItem(this.character.id, item));
         }
       }
+
       for (let id of this.idForDelete) {
-        observablesBackend.push(this.backendService.deleteItem(id));
+        itemsToDelete.push(id);
       }
-      if (observablesBackend.length > 0) {
-        await lastValueFrom(forkJoin(observablesBackend));
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar'
+      });
+
+      if (result.isConfirmed) {
+        for (let id of itemsToDelete) {
+          observablesBackend.push(this.backendService.deleteItem(id));
+        }
+
+        if (observablesBackend.length > 0) {
+          await lastValueFrom(forkJoin(observablesBackend));
+        }
+
+        this.close();
       }
-      this.close();
     } catch (e) {
-      //Meter mensaje error
-      console.log(e);
+      Swal.fire('Error', 'Se produjo un error al realizar la operación', 'error');
     }
   }
+
 
 }

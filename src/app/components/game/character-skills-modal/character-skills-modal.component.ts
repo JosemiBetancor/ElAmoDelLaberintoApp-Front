@@ -9,6 +9,9 @@ import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import{CharacterSkillsAddModalComponent} from '../character-skills-add-modal/character-skills-add-modal.component';
+import Swal from 'sweetalert2';
+
+
 @Component({
   selector: 'app-character-skills-modal',
   standalone: true,
@@ -78,23 +81,45 @@ export class CharacterSkillsModalComponent {
   async acceptModal(): Promise<void> {
     try {
       const observablesBackend: Observable<any>[] = [];
+      const skillsToDelete: number[] = [];
+  
       for (let skill of this.habilidades) {
         if (!skill.id) {
           observablesBackend.push(this.backendService.postSkill(this.character.id, skill));
         }
       }
+  
       for (let id of this.idForDelete) {
-        observablesBackend.push(this.backendService.deleteSkill(id));
+        skillsToDelete.push(id);
       }
-      if (observablesBackend.length > 0) {
-        await lastValueFrom(forkJoin(observablesBackend));
+  
+      // Mostrar el cuadro de diálogo de confirmación
+      const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, continuar',
+        cancelButtonText: 'Cancelar'
+      });
+  
+      // Verificar si se hizo clic en "Confirmar"
+      if (result.isConfirmed) {
+        for (let id of skillsToDelete) {
+          observablesBackend.push(this.backendService.deleteSkill(id));
+        }
+  
+        if (observablesBackend.length > 0) {
+          await lastValueFrom(forkJoin(observablesBackend));
+        }
+  
+        this.close();
       }
-      this.close();
     } catch (e) {
-      //Meter mensaje error
-      console.log(e);
+      Swal.fire('Error', 'Se produjo un error al realizar la operación', 'error');
     }
   }
+  
   closeSkillsAddModal(): void {
     this.isVisible = true;
   }
