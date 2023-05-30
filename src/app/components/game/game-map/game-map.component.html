@@ -1,2 +1,10 @@
-<div #mapContainer>funciono
+<div #mapContainer style="flex: 1 1 auto; min-width: 0; height: 100%; position: relative">
+    <div style="position: absolute; top: 5px; right: 5px;" class="dropdown" (click)="openDropdown()">
+        <button><span nz-icon nzType="plus-circle"></span></button>
+        <div style="  display: flex; flex-wrap: wrap;  overflow-y: scroll; max-height: 200px; max-width: 200px;"
+            *ngIf="isDropdownOpen">
+            <img style="height: 80px; width: auto;  flex-basis: 50%;box-sizing: border-box; padding: 5px;"
+                *ngFor="let item of sprites" [src]="item" (click)="addSpriteToMap(item)">
+        </div>
+    </div>
 </div>

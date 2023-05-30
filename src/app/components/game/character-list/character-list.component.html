@@ -1,3 +1,7 @@
 <div class="character-list-container">
-    <app-character-item *ngFor="let character of characters" [character]="character"></app-character-item>
+    <app-character-item *ngFor="let character of characters" [character]="character" (deleteSuccessEvent)="characterDeleteSuccessEvent($event)"></app-character-item>
+    <button nz-button nzType="primary" style="align-items: flex-end;" (click)="openCharacterAddModal()">Añadir personaje</button>
 </div>
+
+<app-character-add-character-modal (closeEvent)="closeCharacterAddModal()"
+    (createEvent)="createInventoryAddModal($event)"></app-character-add-character-modal>

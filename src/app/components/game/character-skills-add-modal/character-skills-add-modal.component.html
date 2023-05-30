@@ -1,0 +1,26 @@
+<nz-modal nzCentered [(nzVisible)]="isVisible" (nzOnCancel)="close()" [nzMaskClosable]="false">
+    <ng-container *nzModalTitle>
+        Añadir habilidad
+    </ng-container>
+    <ng-container *nzModalContent>
+        <form [formGroup]="formGroup" *ngIf="formGroup">
+
+            <div>
+                <div>
+                    Nombre:
+                </div>
+                <div>
+                    <input nz-input formControlName="nombre"/>
+                </div>
+            </div>
+            <label nz-checkbox formControlName="interpretativa">Interpretativa</label>
+
+        </form>
+    </ng-container>
+    <ng-container *nzModalFooter="">
+        <div style="display: flex; flex-direction: row-reverse; column-gap: 5px;">
+            <button nz-button nzType="primary" (click)="createNewSkill()">Añadir</button>
+            <button nz-button nzType="primary" nzDanger (click)="close()">Cancelar</button>
+        </div>
+    </ng-container>
+</nz-modal>

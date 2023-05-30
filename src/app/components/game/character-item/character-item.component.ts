@@ -1,11 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ICharacter } from 'src/app/interfaces/game.interfaces';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BackendService } from 'src/app/services/backend.service';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import { CharacterInventoryModalComponent } from '../character-inventory-modal/character-inventory-modal.component';
+import { CharacterSkillsModalComponent } from '../character-skills-modal/character-skills-modal.component';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-character-item',
@@ -17,16 +21,21 @@ import { CharacterInventoryModalComponent } from '../character-inventory-modal/c
     FormsModule,
     ReactiveFormsModule,
     CharacterInventoryModalComponent,
+    CharacterSkillsModalComponent,
+    NzButtonModule,
+    NzIconModule,
   ],
   templateUrl: './character-item.component.html',
   styleUrls: ['./character-item.component.css']
 })
 export class CharacterItemComponent implements OnInit {
 
+  @Output() deleteSuccessEvent = new EventEmitter<ICharacter>();
+
   @Input() character!: ICharacter;
 
   @ViewChild('characterInventoryModal') characterInventoryModal: CharacterInventoryModalComponent;
-
+  @ViewChild('characterSkillsModal') characterSkillsModal: CharacterSkillsModalComponent;
   inputStringOnEdit = false;
   hover = false;
 
@@ -82,6 +91,9 @@ export class CharacterItemComponent implements OnInit {
   openInventory() {
     this.characterInventoryModal.openModal(this.character);
   }
+  openHabilidades() {
+    this.characterSkillsModal.openModal(this.character);
+  }
 
   async onFileSelected(event: any): Promise<void> {
     const file = event.target.files[0];
@@ -97,4 +109,29 @@ export class CharacterItemComponent implements OnInit {
     await lastValueFrom(this.backendService.putCharacter(this.character.id, newCharacter));
     this.character.imagen = stringUrl;
   }
+
+  async deleteCharacter(character: ICharacter) {
+    // Mostrar el cuadro de diálogo de confirmación
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+    if (result.isConfirmed) {
+      try {
+        await lastValueFrom(this.backendService.deleteCharacter(character.id));
+        this.deleteSuccessEvent.emit(character);
+        Swal.fire('Eliminado', 'El personaje ha sido eliminado', 'success');
+      } catch (error) {
+        Swal.fire('Error', 'Se produjo un error al realizar la operación', 'error');
+      }
+
+
+
+    }
+  }
+
 }
