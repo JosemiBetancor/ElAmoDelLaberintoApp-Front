@@ -57,4 +57,17 @@ hola() {
   closeCharacterAddModal(): void {
     this.isVisible = true;
   }
+
+  characterDeleteSuccessEvent(character: ICharacter) {
+    let indexDelete = -1;
+    this.characters.find((item: ICharacter, index: number) => {
+      if (item.id === character.id) {
+        indexDelete = index;
+        return true;
+      }
+    });
+    if (indexDelete > -1) {
+      this.characters.splice(indexDelete, 1);
+    }
+  }
 }

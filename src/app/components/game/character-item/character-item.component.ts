@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ICharacter } from 'src/app/interfaces/game.interfaces';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -29,6 +29,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./character-item.component.css']
 })
 export class CharacterItemComponent implements OnInit {
+
+  @Output() deleteSuccessEvent = new EventEmitter<ICharacter>();
 
   @Input() character!: ICharacter;
 
@@ -108,9 +110,7 @@ export class CharacterItemComponent implements OnInit {
     this.character.imagen = stringUrl;
   }
 
-  async deleteCharacter(id: number) {
-    console.log(id);
-
+  async deleteCharacter(character: ICharacter) {
     // Mostrar el cuadro de diálogo de confirmación
     const result = await Swal.fire({
       title: '¿Estás seguro?',
@@ -122,7 +122,8 @@ export class CharacterItemComponent implements OnInit {
     });
     if (result.isConfirmed) {
       try {
-        await lastValueFrom(this.backendService.deleteCharacter(id));
+        await lastValueFrom(this.backendService.deleteCharacter(character.id));
+        this.deleteSuccessEvent.emit(character);
         Swal.fire('Eliminado', 'El personaje ha sido eliminado', 'success');
       } catch (error) {
         Swal.fire('Error', 'Se produjo un error al realizar la operación', 'error');
